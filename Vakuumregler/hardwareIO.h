@@ -1,10 +1,11 @@
+#define hardwareIO_h
 #include <Arduino.h>
 
 class pressureinput {
 private:
-  int pin;
-  float offset;
-  float scale;
+  int _pin;
+  float _offset;
+  float _scale;
 
 public:
   pressureinput(int pin, float offset, float scale);
@@ -14,7 +15,8 @@ public:
 
 class freqoutput {
 private:
-  int pin;
+  int _pin;
+  int _maxfreq;
 public:
   freqoutput(int pin, int maxfreq);
   void setfreq(float frequency);

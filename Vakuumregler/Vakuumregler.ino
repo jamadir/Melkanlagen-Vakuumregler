@@ -47,7 +47,7 @@ void loop() {
   Serial.print(" Outp: ");
   Serial.print(Output);
   Serial.print(" freq: ");
-  frequenz = 30;
+  frequenz = 5;
   Serial.println(frequenz);
   Wechselrichter.setfreq(frequenz);
 }

@@ -34,6 +34,6 @@ void freqoutput::setfreq(float frequency) {
   int frequency_PWM = frequency * 4.25;
   Serial.print(" fpwm:\t");
   Serial.print(frequency_PWM);
-  analogWrite(3, 122);
+  analogWrite(3, frequency_PWM);
   
 }

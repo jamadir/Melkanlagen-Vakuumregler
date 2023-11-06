@@ -9,8 +9,6 @@
 #define regelzielprozent 0.9
 
 
-pressureinput Drucksensor(pressurepin, 0.5, 0.4);
-freqoutput Wechselrichter(PWMpin, 60);
 
 
 double Setpoint, Input, Output;
@@ -19,11 +17,21 @@ PID PIDregler(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
 void setup() {
 
-  Wechselrichter.setfreq(50);
-  delay(10000);
-  int regelziel = regelzielprozent * 10000* Drucksensor.getpressure();
+  analogWrite(PWMpin, 255);
+  delay(20000);
+  int analogval = 0;
 
-  Input = regelziel / regelzielprozent;
+  int c = 0;
+  while (c < 10) {
+    analogval = analogRead(pressurepin) + analogval;
+    c++;
+  }
+  analogval = analogval / c;
+
+
+  int regelziel = regelzielprozent * (1024 - analogval);
+
+  Input = regelziel * regelzielprozent;
   Setpoint = regelziel;
   PIDregler.SetMode(AUTOMATIC);
 }
@@ -31,9 +39,9 @@ void setup() {
 void loop() {
 
 
-  int intinput = 10000*Drucksensor.getpressure();
+  int intinput = 1024 - analogRead(pressurepin);
   Input = intinput;
-  // Serial.println(100*Drucksensor.getpressure());
+
   PIDregler.Compute();
 
   float frequenz = map(Output, 0, 1.1, 0, 50);  //Zusammenhang messen
@@ -47,7 +55,6 @@ void loop() {
   Serial.print(" Outp: ");
   Serial.print(Output);
   Serial.print(" freq: ");
-  frequenz = 5;
   Serial.println(frequenz);
-  Wechselrichter.setfreq(Output);
+  analogWrite(PWMpin, Output);
 }
